@@ -35,6 +35,8 @@ public class main {
 		Link link=new Link(id, costo, obtenerRouter(router1), obtenerRouter(router2));
 		if(!links.contains(link)) {
 			links.add(link);
+			obtenerRouter(router1).addAdyacente(link, obtenerRouter(router2));
+			obtenerRouter(router2).addAdyacente(link, obtenerRouter(router1));
 			return true;
 		}
 		return false;
@@ -71,7 +73,7 @@ public class main {
 						mensajesRouter.add(new Entrada(e.getDestino(), Integer.MAX_VALUE,e.getLink()));
 					}
 					else {
-						mensajesRouter.add(new Entrada(e.getDestino(), e.getCosto(),e.getLink()));
+						mensajesRouter.add(new Entrada(e.getDestino(), e.getCosto(),l.getId()));
 					}
 				}
 			}
@@ -81,6 +83,7 @@ public class main {
 			r.actualizarTabla(mensajes.get(r));//ACTUALIZO
 		}
 		pasosConvergencia.add(getTablasRuteoRed());
+		System.out.println(getTablasRuteoRed());
 	}
 	
 	public ArrayList<String> getInformacionConvergencia() {
@@ -93,12 +96,14 @@ public class main {
 	
 	public void aplicarAlgoritmo() {	
 		pasosConvergencia.add(getTablasRuteoRed());
+
+		System.out.println(getTablasRuteoRed());
+		System.out.println("----------");
+		
 		while(!convergeRed()){
 			realizarIntercambio();
 			numeroPasosConvergencia++;
 		}
-		System.out.println("Hola");
-		System.out.println(pasosConvergencia.get(pasosConvergencia.size()-1));
 	}
 	
 	public ArrayList<String> getRouters() {
