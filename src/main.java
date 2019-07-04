@@ -61,5 +61,13 @@ public class main {
 			
 	}
 	
+	public ArrayList<String> getRouters() {
+		ArrayList<String> nombres=new ArrayList<String>();
+		for(Router r:routers) {
+			nombres.add(r.getNombre());
+		}
+		return nombres;
+	}
+	
 }
 
