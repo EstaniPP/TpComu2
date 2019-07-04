@@ -24,7 +24,7 @@ public class Router {
 		}
 	}
 	
-	public ArrayList<Entrada> getTabla() {
+	public ArrayList<Entrada> getTablaRuteo() {
 		return tablaRuteo;
 	}
 	
