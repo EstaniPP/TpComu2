@@ -65,4 +65,10 @@ public class Router {
 	public String getNombre() {
 		return nombre;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return nombre.equals(((Router)obj).getNombre());
+	}
 }

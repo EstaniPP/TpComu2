@@ -71,10 +71,6 @@ public class MainWindow {
 		frame.getContentPane().add(comboBox_1);
 		
 		main m = new main();
-		m.addRouter("a");
-		m.addRouter("b");
-		m.addRouter("c");
-		m.addRouter("d");
 		for(String nombre: m.getRouters()) {
 			comboBox.addItem(nombre);
 			comboBox_1.addItem(nombre);
@@ -139,7 +135,9 @@ public class MainWindow {
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!comboBox.getSelectedItem().equals(comboBox_1.getSelectedItem()) && !textField.getText().equals("")) {
-					m.addLink(textField.getText().charAt(0), (int)comboBox_2.getSelectedItem(), (String)comboBox.getSelectedItem(), (String)comboBox_1.getSelectedItem());
+					if(m.addLink(textField.getText().charAt(0), (int)comboBox_2.getSelectedItem(), (String)comboBox.getSelectedItem(), (String)comboBox_1.getSelectedItem())) {
+						textPane_1.setText(textPane_1.getText()+"Entrada: "+(String)comboBox.getSelectedItem()+ " <---> " +(String)comboBox_1.getSelectedItem() +" L= "+textField.getText().charAt(0)+" C= "+(int)comboBox_2.getSelectedItem() + "\n");
+					}
 				}
 			}
 		});
@@ -150,9 +148,11 @@ public class MainWindow {
 		btnAgregar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!textField_1.getText().equals(""))
-					m.addRouter(textField_1.getText());
-					comboBox.addItem(textField_1.getText());
-					comboBox_1.addItem(textField_1.getText());
+					if(m.addRouter(textField_1.getText())) {
+						comboBox.addItem(textField_1.getText());
+						comboBox_1.addItem(textField_1.getText());
+						textPane.setText(textPane.getText()+textField_1.getText()+"\n");
+					}
 			}
 		});
 		btnAgregar_1.setBounds(346, 70, 179, 25);
