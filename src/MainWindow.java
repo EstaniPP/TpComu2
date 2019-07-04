@@ -70,6 +70,16 @@ public class MainWindow {
 		comboBox_1.setBounds(96, 91, 95, 24);
 		frame.getContentPane().add(comboBox_1);
 		
+		main m = new main();
+		m.addRouter("a");
+		m.addRouter("b");
+		m.addRouter("c");
+		m.addRouter("d");
+		for(String nombre: m.getRouters()) {
+			comboBox.addItem(nombre);
+			comboBox_1.addItem(nombre);
+		}
+		
 		JLabel lblCosto = new JLabel("Costo:");
 		lblCosto.setBounds(12, 123, 66, 15);
 		frame.getContentPane().add(lblCosto);
@@ -77,6 +87,11 @@ public class MainWindow {
 		JComboBox comboBox_2 = new JComboBox();
 		comboBox_2.setBounds(96, 118, 95, 24);
 		frame.getContentPane().add(comboBox_2);
+		
+
+		for(int i=1; i<6; i++) {
+			comboBox_2.addItem(i);
+		}
 		
 		JLabel lblNombre = new JLabel("Nombre:");
 		lblNombre.setBounds(12, 44, 79, 15);
@@ -123,12 +138,23 @@ public class MainWindow {
 		JButton btnAgregar = new JButton("Agregar entrada");
 		btnAgregar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(!comboBox.getSelectedItem().equals(comboBox_1.getSelectedItem()) && !textField.getText().equals("")) {
+					m.addLink(textField.getText().charAt(0), (int)comboBox_2.getSelectedItem(), (String)comboBox.getSelectedItem(), (String)comboBox_1.getSelectedItem());
+				}
 			}
 		});
 		btnAgregar.setBounds(12, 150, 179, 25);
 		frame.getContentPane().add(btnAgregar);
 		
 		JButton btnAgregar_1 = new JButton("Agregar router");
+		btnAgregar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(!textField_1.getText().equals(""))
+					m.addRouter(textField_1.getText());
+					comboBox.addItem(textField_1.getText());
+					comboBox_1.addItem(textField_1.getText());
+			}
+		});
 		btnAgregar_1.setBounds(346, 70, 179, 25);
 		frame.getContentPane().add(btnAgregar_1);
 	}
