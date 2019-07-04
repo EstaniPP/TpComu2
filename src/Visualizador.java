@@ -15,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class Visualizador {
-
+	private main informacion;
 	private JFrame frame;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -32,12 +32,13 @@ public class Visualizador {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
 	 */
-	public Visualizador() {
+	public Visualizador(main info) {
+		informacion=info;
 		initialize();
 	}
 	
