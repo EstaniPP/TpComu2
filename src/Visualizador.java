@@ -47,7 +47,7 @@ public class Visualizador {
 		df.addColumn("Costo");
 		df.addColumn("Via Link");
 		/*
-		 ACA HAY QUE PONER LAS ROWS
+		 ACA HAY QUE PONER LAS ROWSss
 		 df.addRow(new Object[] {ATRIBUTOS});
 		 */
 		tablaVuelos.setModel(df);
