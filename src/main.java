@@ -36,29 +36,43 @@ public class main {
 		return false;
 	}
 	
-	public void actualizarRed() {
-		HashMap<Router,ArrayList<Entrada>> mensajes=new HashMap<>();
-		for(Router r:routers) {
-			ArrayList<Entrada> aux = new ArrayList<Entrada>();
-			HashMap<Link,Router> adyacentes=r.getAdyacentes();
-			Set<Link> keys= adyacentes.keySet();
-			for(Link l:keys) {
-				ArrayList<Entrada> aux2 = adyacentes.get(l).getTabla();
-				for(Entrada e:aux2) {
-					if(l.getId()==e.getLink()){
-						aux.add(new Entrada(e.getDestino(), Integer.MAX_VALUE,e.getLink()));
+	private boolean convergeRed() {
+		for(Router r : routers)
+			if(!r.converge())
+				return false;
+		return true;
+	}
+	
+	public void realizarIntercambio() {
+		//guardar tablas 
+		HashMap<Router,ArrayList<Entrada>> mensajes = new HashMap<>();
+		for(Router r : routers) {
+			ArrayList<Entrada> mensajesRouter = new ArrayList<Entrada>();
+			HashMap<Link,Router> adyacentes = r.getAdyacentes();
+			Set<Link> keys = adyacentes.keySet();
+			for(Link l : keys) {
+				ArrayList<Entrada> 	mensajesAdyacente = adyacentes.get(l).getTabla();
+				for(Entrada e : mensajesAdyacente) {
+					if(l.getId() == e.getLink()){
+						mensajesRouter.add(new Entrada(e.getDestino(), Integer.MAX_VALUE,e.getLink()));
 					}
 					else {
-						aux.add(new Entrada(e.getDestino(), e.getCosto(),e.getLink()));
+						mensajesRouter.add(new Entrada(e.getDestino(), e.getCosto(),e.getLink()));
 					}
 				}
 			}
-			mensajes.put(r, aux);
+			mensajes.put(r, mensajesRouter);
 		}
 		for(Router r:routers) {//PARA CADA ROUTER
 			r.actualizarTabla(mensajes.get(r));//ACTUALIZO
 		}
-			
+		//guardar tablas
+	}
+	
+	public void aplicarAlgoritmo() {		
+		while(!convergeRed()) {
+			realizarIntercambio();
+		}
 	}
 	
 	public ArrayList<String> getRouters() {
@@ -68,6 +82,4 @@ public class main {
 		}
 		return nombres;
 	}
-	
 }
-
