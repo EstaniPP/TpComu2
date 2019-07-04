@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Visualizador {
 	private main informacion;
-	private JFrame frame;
+	public JFrame frame;
 
 	/**
 	 * Launch the application.
