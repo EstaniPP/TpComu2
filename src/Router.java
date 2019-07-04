@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class Router {
 	private static int ID_GLOBAL = 1;
@@ -30,7 +31,27 @@ public class Router {
 	}
 	
 	public void actualizarTabla(ArrayList<Entrada> mensajes) {
-		
+		for(Entrada e:mensajes) {
+			int costoLink=0;
+			ArrayList<Link> links=(ArrayList<Link>) adyacentes.keySet();
+			for(Link l:links) {
+				if(l.getId()==e.getLink()) {
+					costoLink=l.getCosto();
+					break;
+				}
+			}
+			if(tablaRuteo.contains(e)) {
+				if((e.getCosto()+costoLink)<tablaRuteo.get(tablaRuteo.indexOf(e)).getCosto()) {
+					tablaRuteo.remove(tablaRuteo.indexOf(e));
+					e.setCosto(e.getCosto()+costoLink);
+					tablaRuteo.add(e);
+				}
+			}
+			else {
+				e.setCosto(e.getCosto()+costoLink);
+				tablaRuteo.add(e);
+			}	
+		}
 	}
 	
 	public int getId() {
