@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class Router {
 	private static int ID_GLOBAL = 1;
@@ -30,14 +31,16 @@ public class Router {
 	
 	public void actualizarTabla(ArrayList<Entrada> mensajes) {
 		tablaRuteoAnterior = tablaRuteo;
+		for(Link l: adyacentes.keySet())
+			System.out.println("Link: "+ l.getId()+ " costo: "+l.getCosto());
 		for(Entrada e:mensajes) {
-			int costoLink=0;
-			ArrayList<Link> links=(ArrayList<Link>) adyacentes.keySet();
-			for(Link l:links) {
-				if(l.getId()==e.getLink()) {
-					costoLink=l.getCosto();
-					break;
+			System.out.println("router " + id + " destino " + e.getDestino() + " costo " + e.getCosto() + " link " + e.getLink());
+			int costoLink = 0;
+			for(Link l:adyacentes.keySet()) {
+				if(l.getId() == e.getLink()) {
+					costoLink = l.getCosto();
 				}
+				break;
 			}
 			if(tablaRuteo.contains(e)) {
 				if((e.getCosto()+costoLink)<tablaRuteo.get(tablaRuteo.indexOf(e)).getCosto()) {
@@ -55,8 +58,12 @@ public class Router {
 	
 	public boolean converge() {
 		for(Entrada e : tablaRuteo) {
-			if(!tablaRuteoAnterior.contains(e))
+			if(tablaRuteoAnterior.isEmpty())
 				return false;
+			for(Entrada e_ant : tablaRuteoAnterior)
+				if (e.getDestino() == e_ant.getDestino() && e.getCosto() != e_ant.getCosto()) {
+					return false;
+				}
 		}
 		return true;
 	}
