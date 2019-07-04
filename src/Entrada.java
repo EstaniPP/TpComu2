@@ -10,4 +10,28 @@ public class Entrada {
 		this.destino=destino;
 		this.link=link;
 	}
+	
+	public int getDestino() {
+		return destino;
+	}
+	
+	public int getCosto() {
+		return costo;
+	}
+	
+	public char getLink() {
+		return link;
+	}
+	
+	public void setLink(char link) {
+		this.link = link;
+	}
+	
+	public void setCosto(int costo) {
+		this.costo = costo;
+	}
+	
+	public void setDestino(int destino) {
+		this.destino = destino;
+	}
 }
