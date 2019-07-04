@@ -182,7 +182,7 @@ public class MainWindow {
 		JButton btnAplicarAlgoritmo = new JButton("Aplicar algoritmo");
 		btnAplicarAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//m.aplicarAlgoritmo();
+				m.aplicarAlgoritmo();
 				Visualizador v = new Visualizador(m);
 				v.frame.setVisible(true);
 			}
