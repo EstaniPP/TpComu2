@@ -97,6 +97,7 @@ public class main {
 			realizarIntercambio();
 			numeroPasosConvergencia++;
 		}
+		System.out.println("Hola");
 		System.out.println(pasosConvergencia.get(pasosConvergencia.size()-1));
 	}
 	
