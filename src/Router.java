@@ -6,4 +6,8 @@ public class Router {
 	private int id;
 	private HashMap<Link,Router> adyacentes;
 	private List<Entrada> tablaRuteo; 
+	
+	public Router() {
+		id = ID_GLOBAL++;
+	}
 }
