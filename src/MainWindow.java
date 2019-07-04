@@ -23,6 +23,8 @@ public class MainWindow {
 	private JTextField textField_1;
 	private JTable table;
 	private JTable table_1;
+	private JTextField textField_2;
+	private JTextField textField_3;
 
 	/**
 	 * Launch the application.
@@ -142,6 +144,15 @@ public class MainWindow {
 		frame.getContentPane().add(scrollPane_1);
 		scrollPane_1.setViewportView(table_1);
 		
+		textField = new JTextField();
+		textField.setBounds(96, 42, 95, 19);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		textField_1.setBounds(430, 39, 95, 19);
+		frame.getContentPane().add(textField_1);
 		
 		JButton btnAgregar_1 = new JButton("Agregar router");
 		btnAgregar_1.addActionListener(new ActionListener() {
