@@ -3,12 +3,16 @@ import java.util.HashMap;
 import java.util.Set;
 
 public class main {
-	ArrayList<Router> routers;
-	ArrayList<Link> links;
+	private ArrayList<Router> routers;
+	private ArrayList<Link> links;
+	private ArrayList<String> pasosConvergencia;
+	private int numeroPasosConvergencia;
 	
 	public main() {
-		routers=new ArrayList<>();
-		links=new ArrayList<>();
+		routers = new ArrayList<>();
+		links = new ArrayList<>();
+		pasosConvergencia = new ArrayList<>();
+		numeroPasosConvergencia = 0;
 	}
 	
 	public boolean addRouter(String nombre) {
@@ -43,15 +47,25 @@ public class main {
 		return true;
 	}
 	
+	public String getTablasRuteoRed() {
+		String informacion = "";
+		for(Router r : routers) {
+			ArrayList<Entrada> entradasRouter = r.getTablaRuteo();
+			for (Entrada e : entradasRouter) {
+				informacion += "Router " + r.getNombre() + ": " + e.getDestino() + " - " + e.getCosto() + " - " + e.getLink() + "\n";
+			}
+		}
+		return informacion;
+	}
+	
 	public void realizarIntercambio() {
-		//guardar tablas 
 		HashMap<Router,ArrayList<Entrada>> mensajes = new HashMap<>();
 		for(Router r : routers) {
 			ArrayList<Entrada> mensajesRouter = new ArrayList<Entrada>();
 			HashMap<Link,Router> adyacentes = r.getAdyacentes();
 			Set<Link> keys = adyacentes.keySet();
 			for(Link l : keys) {
-				ArrayList<Entrada> 	mensajesAdyacente = adyacentes.get(l).getTabla();
+				ArrayList<Entrada> 	mensajesAdyacente = adyacentes.get(l).getTablaRuteo();
 				for(Entrada e : mensajesAdyacente) {
 					if(l.getId() == e.getLink()){
 						mensajesRouter.add(new Entrada(e.getDestino(), Integer.MAX_VALUE,e.getLink()));
@@ -66,13 +80,24 @@ public class main {
 		for(Router r:routers) {//PARA CADA ROUTER
 			r.actualizarTabla(mensajes.get(r));//ACTUALIZO
 		}
-		//guardar tablas
+		pasosConvergencia.add(getTablasRuteoRed());
 	}
 	
-	public void aplicarAlgoritmo() {		
-		while(!convergeRed()) {
+	public ArrayList<String> getInformacionConvergencia() {
+		return pasosConvergencia;
+	}
+	
+	public int getNumeroPasosConvergencia() {
+		return numeroPasosConvergencia;
+	}
+	
+	public void aplicarAlgoritmo() {	
+		pasosConvergencia.add(getTablasRuteoRed());
+		while(!convergeRed()){
 			realizarIntercambio();
+			numeroPasosConvergencia++;
 		}
+		System.out.println(pasosConvergencia.get(pasosConvergencia.size()-1));
 	}
 	
 	public ArrayList<String> getRouters() {
