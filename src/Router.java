@@ -1,22 +1,20 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 public class Router {
 	private static int ID_GLOBAL = 1;
 	private int id;
 	private HashMap<Link,Router> adyacentes;
 	private ArrayList<Entrada> tablaRuteo;
-	private boolean converge;
+	private ArrayList<Entrada> tablaRuteoAnterior;
 	private String nombre;
 	
 	public Router(String nombre) {
 		id = ID_GLOBAL++;
 		adyacentes = new HashMap<Link,Router>();
 		tablaRuteo = new ArrayList<Entrada>();
-		tablaRuteo.add(new Entrada(id,0,'-'));	
-		converge=false;
+		tablaRuteo.add(new Entrada(id,0,'-'));
+		tablaRuteoAnterior = new ArrayList<Entrada>();
 		this.nombre=nombre;
 	}
 	
@@ -31,6 +29,7 @@ public class Router {
 	}
 	
 	public void actualizarTabla(ArrayList<Entrada> mensajes) {
+		tablaRuteoAnterior = tablaRuteo;
 		for(Entrada e:mensajes) {
 			int costoLink=0;
 			ArrayList<Link> links=(ArrayList<Link>) adyacentes.keySet();
@@ -54,6 +53,14 @@ public class Router {
 		}
 	}
 	
+	public boolean converge() {
+		for(Entrada e : tablaRuteo) {
+			if(!tablaRuteoAnterior.contains(e))
+				return false;
+		}
+		return true;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -68,7 +75,6 @@ public class Router {
 	
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
 		return nombre.equals(((Router)obj).getNombre());
 	}
 }
