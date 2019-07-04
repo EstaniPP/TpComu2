@@ -34,4 +34,10 @@ public class Entrada {
 	public void setDestino(int destino) {
 		this.destino = destino;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return (this.destino==((Entrada)obj).getDestino());
+	}
 }
