@@ -30,17 +30,14 @@ public class Router {
 	}
 	
 	public void actualizarTabla(ArrayList<Entrada> mensajes) {
-		tablaRuteoAnterior = tablaRuteo;
-		for(Link l: adyacentes.keySet())
-			System.out.println("Link: "+ l.getId()+ " costo: "+l.getCosto());
+		tablaRuteoAnterior = getCopiaArray(tablaRuteo);
 		for(Entrada e:mensajes) {
-			System.out.println("router " + id + " destino " + e.getDestino() + " costo " + e.getCosto() + " link " + e.getLink());
 			int costoLink = 0;
 			for(Link l:adyacentes.keySet()) {
 				if(l.getId() == e.getLink()) {
 					costoLink = l.getCosto();
+					break;
 				}
-				break;
 			}
 			if(tablaRuteo.contains(e)) {
 				if((e.getCosto()+costoLink)<tablaRuteo.get(tablaRuteo.indexOf(e)).getCosto()) {
@@ -56,7 +53,17 @@ public class Router {
 		}
 	}
 	
+	private ArrayList<Entrada> getCopiaArray(ArrayList<Entrada> tablaRuteo) {
+		ArrayList<Entrada> copia = new ArrayList<Entrada>();
+		for(Entrada e: tablaRuteo) {
+			copia.add(new Entrada(e.getDestino(),e.getCosto(),e.getLink()));
+		}
+		return copia;
+	}
+
 	public boolean converge() {
+		if(tablaRuteo.size()!=tablaRuteoAnterior.size())
+			return false;
 		for(Entrada e : tablaRuteo) {
 			if(tablaRuteoAnterior.isEmpty())
 				return false;

@@ -65,12 +65,11 @@ public class main {
 		for(Router r : routers) {
 			ArrayList<Entrada> mensajesRouter = new ArrayList<Entrada>();
 			HashMap<Link,Router> adyacentes = r.getAdyacentes();
-			Set<Link> keys = adyacentes.keySet();
-			for(Link l : keys) {
+			for(Link l : adyacentes.keySet()) {
 				ArrayList<Entrada> 	mensajesAdyacente = adyacentes.get(l).getTablaRuteo();
 				for(Entrada e : mensajesAdyacente) {
 					if(l.getId() == e.getLink()){
-						mensajesRouter.add(new Entrada(e.getDestino(), Integer.MAX_VALUE,e.getLink()));
+						mensajesRouter.add(new Entrada(e.getDestino(), 1000,e.getLink()));
 					}
 					else {
 						mensajesRouter.add(new Entrada(e.getDestino(), e.getCosto(),l.getId()));
