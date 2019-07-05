@@ -42,16 +42,17 @@ public class Visualizador {
 		initialize();
 	}
 	
-	private void showRouters(JTable tablaVuelos) {
+	private void showRouters(JTable tablasRuteo) {
 		DefaultTableModel df = new DefaultTableModel();
-		df.addColumn("Destino");
+		df.addColumn("Router origen");
+		df.addColumn("Router destino");
 		df.addColumn("Costo");
-		df.addColumn("Via Link");
+		df.addColumn("Link");
 		/*
 		 ACA HAY QUE PONER LAS ROWSSSSSSS
 		 df.addRow(new Object[] {ATRIBUTOS});
 		 */
-		tablaVuelos.setModel(df);
+		tablasRuteo.setModel(df);
 	}
 
 	/**
@@ -67,10 +68,11 @@ public class Visualizador {
 		scrollPane.setBounds(12, 12, 563, 292);
 		frame.getContentPane().add(scrollPane);
 		
+		//int cantTablas=informacion.getNumeroPasosConvergencia();
 		int cantTablas=3;
-		JPanel panelVuelos = new JPanel();
-		scrollPane.setViewportView(panelVuelos);
-		panelVuelos.setLayout(new GridLayout(cantTablas, 4, 0, 0));
+		JPanel panelRuteo = new JPanel();
+		scrollPane.setViewportView(panelRuteo);
+		panelRuteo.setLayout(new GridLayout(cantTablas, 1, 0, 0));
 				
 		JScrollPane scrollPane_tablaTramos[] = new JScrollPane[cantTablas];
 		JTable tablas[]=new JTable[cantTablas];
@@ -79,7 +81,7 @@ public class Visualizador {
 			tablas[i]=new JTable();
 			scrollPane_tablaTramos[i].setPreferredSize(new Dimension(590,100));
 			scrollPane_tablaTramos[i].setViewportView(tablas[i]);
-			panelVuelos.add(scrollPane_tablaTramos[i]);
+			panelRuteo.add(scrollPane_tablaTramos[i]);
 			showRouters(tablas[i]);
 		}
 	}
