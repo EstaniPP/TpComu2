@@ -190,7 +190,7 @@ public class MainWindow {
 		btnAgregar.setBounds(12, 150, 179, 25);
 		frame.getContentPane().add(btnAgregar);
 		
-		JButton btnAplicarAlgoritmo = new JButton("Aplicaar algoritmo");
+		JButton btnAplicarAlgoritmo = new JButton("Aplicar algoritmo");
 		btnAplicarAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				m.addRouter("A");
