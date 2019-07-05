@@ -1,8 +1,11 @@
 import java.awt.EventQueue;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -15,9 +18,10 @@ import javax.swing.table.DefaultTableModel;
 
 
 public class Visualizador {
-	private main informacion;
+	private main red;
 	public JFrame frame;
-
+	private ArrayList<HashMap<String, ArrayList<Entrada>>> informacion;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -37,12 +41,13 @@ public class Visualizador {
 	/**
 	 * Create the application.
 	 */
-	public Visualizador(main info) {
-		informacion=info;
+	public Visualizador(main red) {
+		this.red=red;
+		informacion = red.getInformacion();
 		initialize();
 	}
 	
-	private void showRouters(JTable tablasRuteo) {
+	private void showRouters(JTable tablasRuteo, ArrayList<Entrada> entradas) {
 		DefaultTableModel df = new DefaultTableModel();
 		df.addColumn("Router origen");
 		df.addColumn("Router destino");
@@ -68,21 +73,35 @@ public class Visualizador {
 		scrollPane.setBounds(12, 12, 563, 292);
 		frame.getContentPane().add(scrollPane);
 		
-		//int cantTablas=informacion.getNumeroPasosConvergencia();
-		int cantTablas=3;
+		
+		int cantTablas=informacion.size()*(informacion.get(0).size()*2+1);
 		JPanel panelRuteo = new JPanel();
 		scrollPane.setViewportView(panelRuteo);
 		panelRuteo.setLayout(new GridLayout(cantTablas, 1, 0, 0));
-				
-		JScrollPane scrollPane_tablaTramos[] = new JScrollPane[cantTablas];
-		JTable tablas[]=new JTable[cantTablas];
-		for(int i=0; i<cantTablas; i++) {
-			scrollPane_tablaTramos[i] = new JScrollPane();
-			tablas[i]=new JTable();
-			scrollPane_tablaTramos[i].setPreferredSize(new Dimension(590,100));
-			scrollPane_tablaTramos[i].setViewportView(tablas[i]);
-			panelRuteo.add(scrollPane_tablaTramos[i]);
-			showRouters(tablas[i]);
+		
+		for(int i=0;i<informacion.size();i++) {
+			panelRuteo.add(new JLabel("Tiempo= "+i*30));
+			for(String s: informacion.get(i).keySet()) {
+				panelRuteo.add(new JLabel("Router: "+s));
+				panelRuteo.add(new JLabel("Table"));
+				JTable table = new JTable();
+				showRouters(table,informacion.get(i).get(s));
+				panelRuteo.add(table);
+			}
 		}
+		
+		/*
+		 * 		for(int i=0;i<informacion.size();i++) {
+			panelRuteo.add(new JLabel("Tiempo= "+i*30));
+			for(String s: informacion.get(i).keySet()) {
+				panelRuteo.add(new JLabel("Router: "+s));
+				panelRuteo.add(new JLabel("Table"));
+				for(int j=0;j<informacion.get(i).get(s).size(); j++) {
+					System.out.println("Destino: "+informacion.get(i).get(s).get(j).getDestino()+" costo "+informacion.get(i).get(s).get(j).getCosto()+ " link "+ informacion.get(i).get(s).get(j).getLink());
+				}
+			}
+		}
+		 */
+		
 	}
 }
