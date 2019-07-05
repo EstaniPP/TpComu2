@@ -1,17 +1,17 @@
 
 public class Entrada {
 
-	int destino;
+	String destino;
 	int costo;
 	char link;
 	
-	public Entrada(int destino, int costo, char link) {
+	public Entrada(String destino, int costo, char link) {
 		this.costo=costo;
 		this.destino=destino;
 		this.link=link;
 	}
 	
-	public int getDestino() {
+	public String getDestino() {
 		return destino;
 	}
 	
@@ -31,7 +31,7 @@ public class Entrada {
 		this.costo = costo;
 	}
 	
-	public void setDestino(int destino) {
+	public void setDestino(String destino) {
 		this.destino = destino;
 	}
 	
