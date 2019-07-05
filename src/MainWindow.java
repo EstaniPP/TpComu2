@@ -193,13 +193,13 @@ public class MainWindow {
 		JButton btnAplicarAlgoritmo = new JButton("Aplicar algoritmo");
 		btnAplicarAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				/*m.addRouter("A");
+				m.addRouter("A");
 				m.addRouter("B");
 				m.addRouter("C");
 		
 				m.addLink('1', 2, "B", "C");
 				m.addLink('2', 1, "A", "B");
-				m.addLink('3', 5, "C", "A");*/
+				m.addLink('3', 5, "C", "A");
 				m.aplicarAlgoritmo();
 				Visualizador v = new Visualizador(m);
 				v.frame.setVisible(true);

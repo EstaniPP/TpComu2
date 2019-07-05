@@ -14,7 +14,7 @@ public class Router {
 		id = ID_GLOBAL++;
 		adyacentes = new HashMap<Link,Router>();
 		tablaRuteo = new ArrayList<Entrada>();
-		tablaRuteo.add(new Entrada(id,0,'-'));
+		tablaRuteo.add(new Entrada(nombre,0,'-'));
 		tablaRuteoAnterior = new ArrayList<Entrada>();
 		this.nombre=nombre;
 	}
@@ -31,6 +31,8 @@ public class Router {
 	
 	public void actualizarTabla(ArrayList<Entrada> mensajes) {
 		tablaRuteoAnterior = getCopiaArray(tablaRuteo);
+		tablaRuteo = new ArrayList<Entrada>();
+		tablaRuteo.add(new Entrada(nombre,0,'-'));
 		for(Entrada e:mensajes) {
 			int costoLink = 0;
 			for(Link l:adyacentes.keySet()) {
