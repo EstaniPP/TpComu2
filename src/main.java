@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class main {
 	private ArrayList<Router> routers;
@@ -86,7 +85,6 @@ public class main {
 			informacion.get(numeroPasosConvergencia).put(r.getNombre(), r.getTablaRuteo());
 		}
 		pasosConvergencia.add(getTablasRuteoRed());
-		//System.out.println(getTablasRuteoRed());
 	}
 	
 	public ArrayList<String> getInformacionConvergencia() {
@@ -104,15 +102,11 @@ public class main {
 		for(Router r:routers) {
 			informacion.get(numeroPasosConvergencia).put(r.getNombre(), r.getTablaRuteo());
 		}
-	
-		//System.out.println("Tiempo: "+numeroPasosConvergencia*30);
-		//System.out.println(getTablasRuteoRed());
 		numeroPasosConvergencia++;
 		
 		 
 		while(!convergeRed()){
 			informacion.add(new HashMap<String, ArrayList<Entrada>>());
-			//System.out.println("Tiempo: "+numeroPasosConvergencia*30);
 			realizarIntercambio();
 			numeroPasosConvergencia++;
 		}

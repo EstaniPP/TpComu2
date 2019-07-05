@@ -1,18 +1,24 @@
-import java.awt.EventQueue;
-import java.awt.GridLayout;
+import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Vector;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.awt.event.ActionEvent;
 
 
 
@@ -21,26 +27,7 @@ public class Visualizador {
 	private main red;
 	public JFrame frame;
 	private ArrayList<HashMap<String, ArrayList<Entrada>>> informacion;
-	
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Visualizador window = new Visualizador();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
-	/**
-	 * Create the application.
-	 */
 	public Visualizador(main red) {
 		this.red=red;
 		informacion = red.getInformacion();
@@ -49,14 +36,12 @@ public class Visualizador {
 	
 	private void showRouters(JTable tablasRuteo, ArrayList<Entrada> entradas) {
 		DefaultTableModel df = new DefaultTableModel();
-		df.addColumn("Router origen");
-		df.addColumn("Router destino");
+		df.addColumn("Red destino");
 		df.addColumn("Costo");
 		df.addColumn("Link");
-		/*
-		 ACA HAY QUE PONER LAS ROWSSSSSSS
-		 df.addRow(new Object[] {ATRIBUTOS});
-		 */
+		for(Entrada e: entradas) {
+		 df.addRow(new Object[] {e.getDestino(),e.getCosto(),e.getLink()});
+		}
 		tablasRuteo.setModel(df);
 	}
 
@@ -65,43 +50,81 @@ public class Visualizador {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 596, 344);
+		frame.setBounds(100, 100, 650, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 12, 563, 292);
+		scrollPane.setBounds(12, 12, 626, 700);
 		frame.getContentPane().add(scrollPane);
-		
-		
-		int cantTablas=informacion.size()*(informacion.get(0).size()*2+1);
 		JPanel panelRuteo = new JPanel();
 		scrollPane.setViewportView(panelRuteo);
-		panelRuteo.setLayout(new GridLayout(cantTablas, 1, 0, 0));
+		panelRuteo.setLayout(new BoxLayout(panelRuteo,BoxLayout.Y_AXIS));
+		
+		JButton btnSimularCaidaDe = new JButton("Simular caida de link");
+		btnSimularCaidaDe.setBounds(461, 737, 177, 25);
+		frame.getContentPane().add(btnSimularCaidaDe);
+		
+		JButton btnGuardarResultados = new JButton("Guardar resultados");
+		btnGuardarResultados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				StringBuilder infotxt = new StringBuilder();
+				for(int i=0;i<informacion.size();i++) {
+					infotxt.append("Tiempo= "+i*30+"\n");
+					for(String s: informacion.get(i).keySet()) {
+						infotxt.append("Router: "+s+"\n");
+						for(int j=0;j<informacion.get(i).get(s).size(); j++) {
+							infotxt.append("Destino: "+informacion.get(i).get(s).get(j).getDestino()+" costo "+informacion.get(i).get(s).get(j).getCosto()+ " link "+ informacion.get(i).get(s).get(j).getLink()+ "\n");
+						}
+					}
+				}
+				String path = "";
+				JFileChooser fc = new JFileChooser();
+				fc.setDialogTitle("¿Donde desea guardar los resultados?");
+				fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		        int result = fc.showSaveDialog(null);
+		        if (result == JFileChooser.APPROVE_OPTION) {
+		            File file = fc.getSelectedFile();
+		            path=file.getPath();
+		        }
+	    		try
+	    		{
+	    			File archivo=new File(path+"/Resultados.txt");
+	    			archivo.delete();
+	    			FileWriter file=new FileWriter(archivo,true);
+    				file.write(infotxt.toString());
+	    			file.close();
+	    		}catch(Exception e){
+	    			System.out.println("Error al escribir");
+	    		}				
+			}
+		});
+		btnGuardarResultados.setBounds(283, 737, 166, 25);
+		frame.getContentPane().add(btnGuardarResultados);
 		
 		for(int i=0;i<informacion.size();i++) {
-			panelRuteo.add(new JLabel("Tiempo= "+i*30));
+			JLabel labelTiempo = new JLabel("\n Tiempo: "+i*30+" segundos\n");
+			labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
+			
+			Box box2 = Box.createHorizontalBox();
+			panelRuteo.add(box2);
+			JPanel aux2 = new JPanel();
+			aux2.add(labelTiempo);
+			box2.add(aux2);
+			
 			for(String s: informacion.get(i).keySet()) {
-				panelRuteo.add(new JLabel("Router: "+s));
-				panelRuteo.add(new JLabel("Table"));
+				Box box = Box.createHorizontalBox();
+				panelRuteo.add(box);
+				JPanel aux = new JPanel();
+				aux.add(new JLabel("Router: "+s));
+				box.add(aux);
 				JTable table = new JTable();
 				showRouters(table,informacion.get(i).get(s));
-				panelRuteo.add(table);
+				JScrollPane panel = new JScrollPane(table);
+				panel.setPreferredSize(new Dimension(590,100));
+				panel.setViewportView(table);
+				panelRuteo.add(panel);
 			}
-		}
-		
-		/*
-		 * 		for(int i=0;i<informacion.size();i++) {
-			panelRuteo.add(new JLabel("Tiempo= "+i*30));
-			for(String s: informacion.get(i).keySet()) {
-				panelRuteo.add(new JLabel("Router: "+s));
-				panelRuteo.add(new JLabel("Table"));
-				for(int j=0;j<informacion.get(i).get(s).size(); j++) {
-					System.out.println("Destino: "+informacion.get(i).get(s).get(j).getDestino()+" costo "+informacion.get(i).get(s).get(j).getCosto()+ " link "+ informacion.get(i).get(s).get(j).getLink());
-				}
-			}
-		}
-		 */
-		
+		}		
 	}
 }

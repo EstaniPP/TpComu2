@@ -1,14 +1,10 @@
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.JSeparator;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.ActionListener;
@@ -23,8 +19,6 @@ public class MainWindow {
 	private JTextField textField_1;
 	private JTable table;
 	private JTable table_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
 
 	/**
 	 * Launch the application.
@@ -101,8 +95,8 @@ public class MainWindow {
 		lblNombre.setBounds(12, 44, 79, 15);
 		frame.getContentPane().add(lblNombre);
 		
-		JLabel lblRouterNuevo = new JLabel("Router nuevo:");
-		lblRouterNuevo.setBounds(346, 12, 97, 15);
+		JLabel lblRouterNuevo = new JLabel("Router/red nuevo:");
+		lblRouterNuevo.setBounds(346, 12, 136, 15);
 		frame.getContentPane().add(lblRouterNuevo);
 		
 		JLabel label = new JLabel("Nombre:");
@@ -161,7 +155,6 @@ public class MainWindow {
 					if(m.addRouter(textField_1.getText())) {
 						comboBox.addItem(textField_1.getText());
 						comboBox_1.addItem(textField_1.getText());
-						//textPane.setText(textPane.getText()+textField_1.getText()+"\n");
 						Object[] p = new Object[] {textField_1.getText()};
 						model.addRow(p);
 					}
@@ -176,7 +169,6 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!comboBox.getSelectedItem().equals(comboBox_1.getSelectedItem()) && !textField.getText().equals("")) {
 					if(m.addLink(textField.getText().charAt(0), (int)comboBox_2.getSelectedItem(), (String)comboBox.getSelectedItem(), (String)comboBox_1.getSelectedItem())) {
-						//textPane_1.setText(textPane_1.getText()+"Entrada: "+(String)comboBox.getSelectedItem()+ " <---> " +(String)comboBox_1.getSelectedItem() +" L= "+textField.getText().charAt(0)+" C= "+(int)comboBox_2.getSelectedItem() + "\n");
 						Object[] p = new Object[] {textField.getText().charAt(0),
 								comboBox_2.getSelectedItem(),
 								comboBox.getSelectedItem(),

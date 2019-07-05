@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Router {
 	private static int ID_GLOBAL = 1;
