@@ -193,6 +193,7 @@ public class MainWindow {
 				m.addLink('2', 1, "A", "B");
 				m.addLink('3', 5, "C", "A");
 				m.aplicarAlgoritmo();
+
 				Visualizador v = new Visualizador(m);
 				v.frame.setVisible(true);
 			}

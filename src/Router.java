@@ -36,7 +36,11 @@ public class Router {
 			int costoLink = 0;
 			for(Link l:adyacentes.keySet()) {
 				if(l.getId() == e.getLink()) {
-					costoLink = l.getCosto();
+					if(l.isCaido()) {
+						costoLink = 1000;
+					}else {
+						costoLink = l.getCosto();
+					}
 					break;
 				}
 			}
@@ -91,5 +95,29 @@ public class Router {
 	@Override
 	public boolean equals(Object obj) {
 		return nombre.equals(((Router)obj).getNombre());
+	}
+	
+	public void actualizarRouterCaidaLink(Link link, HashMap<String, ArrayList<Entrada>> informacionCaida) {
+		ArrayList<Entrada> modificados=new ArrayList<Entrada>();
+		Router routerAdy=new Router("a");
+		routerAdy=link.getAdyacente(this);
+		if(!informacionCaida.containsKey(nombre))
+		{
+			for(Entrada e:tablaRuteo) {
+				if(!link.isCaido() && e.getLink()==link.getId() && informacionCaida.get(routerAdy.getNombre()).contains(new Entrada(e.getDestino(),0,e.getLink()))) {
+					e.setCosto(1000);
+					modificados.add(e);
+				}else if(link.isCaido() && e.getLink()==link.getId()) {
+					e.setCosto(1000);
+					modificados.add(e);
+				}
+			}
+			informacionCaida.put(nombre, modificados);
+			for(Link l:adyacentes.keySet()) {
+				if(!l.isCaido() && (modificados.size()!=0)) {
+					adyacentes.get(l).actualizarRouterCaidaLink(l, informacionCaida);
+				}
+			}
+		}
 	}
 }

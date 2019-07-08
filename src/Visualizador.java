@@ -19,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 
 
@@ -61,10 +62,6 @@ public class Visualizador {
 		scrollPane.setViewportView(panelRuteo);
 		panelRuteo.setLayout(new BoxLayout(panelRuteo,BoxLayout.Y_AXIS));
 		
-		JButton btnSimularCaidaDe = new JButton("Simular caida de link");
-		btnSimularCaidaDe.setBounds(461, 737, 177, 25);
-		frame.getContentPane().add(btnSimularCaidaDe);
-		
 		JButton btnGuardarResultados = new JButton("Guardar resultados");
 		btnGuardarResultados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -99,8 +96,20 @@ public class Visualizador {
 	    		}				
 			}
 		});
-		btnGuardarResultados.setBounds(283, 737, 166, 25);
+		btnGuardarResultados.setBounds(472, 724, 166, 25);
 		frame.getContentPane().add(btnGuardarResultados);
+		
+		JLabel lblLink = new JLabel("Link:");
+		lblLink.setBounds(22, 729, 66, 15);
+		frame.getContentPane().add(lblLink);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(75, 724, 90, 24);
+		frame.getContentPane().add(comboBox);
+		
+		for(Link l: red.getLinks()) {
+			comboBox.addItem(l.getId());
+		}
 		
 		for(int i=0;i<informacion.size();i++) {
 			JLabel labelTiempo = new JLabel("\n Tiempo: "+i*30+" segundos\n");
@@ -125,6 +134,17 @@ public class Visualizador {
 				panel.setViewportView(table);
 				panelRuteo.add(panel);
 			}
-		}		
+		}
+		
+		JButton btnSimularCaidaDe = new JButton("Simular caida de link");
+		btnSimularCaidaDe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CaidaLink v = new CaidaLink(red,comboBox.getSelectedItem().toString().charAt(0));
+				v.frame.setVisible(true);
+			}
+		});
+		btnSimularCaidaDe.setBounds(181, 724, 177, 25);
+		frame.getContentPane().add(btnSimularCaidaDe);
+		
 	}
 }

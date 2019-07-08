@@ -35,6 +35,12 @@ public class Link {
 	public Router getRouter2() {
 		return router2;
 	}
+	
+	public Router getAdyacente(Router r) {
+		if(r.getNombre().equals(router1.getNombre()))
+			return router2;
+		return router1;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

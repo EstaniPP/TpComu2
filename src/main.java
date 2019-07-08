@@ -97,7 +97,9 @@ public class main {
 	
 	public void aplicarAlgoritmo() {	
 		pasosConvergencia.add(getTablasRuteoRed());
-		
+		pasosConvergencia = new ArrayList<>();
+		numeroPasosConvergencia = 0;
+		informacion = new ArrayList<HashMap<String,ArrayList<Entrada>>>();
 		informacion.add(new HashMap<String, ArrayList<Entrada>>());
 		for(Router r:routers) {
 			informacion.get(numeroPasosConvergencia).put(r.getNombre(), r.getTablaRuteo());
@@ -120,7 +122,20 @@ public class main {
 		return nombres;
 	}
 	
+	public ArrayList<Link> getLinks() {
+		return links;
+	}
+	
 	public ArrayList<HashMap<String, ArrayList<Entrada>>> getInformacion() {
 		return informacion;
 	}
+
+	public HashMap<String, ArrayList<Entrada>> caerLink(Link linkCaido, Router r1) {
+		HashMap<String, ArrayList<Entrada>> informacionCaida = new HashMap<String, ArrayList<Entrada>>();
+		r1.actualizarRouterCaidaLink(linkCaido, informacionCaida);
+		
+		return informacionCaida;
+	}
+	
+	
 }
