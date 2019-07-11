@@ -11,6 +11,7 @@ public class Entrada {
 		this.link=link;
 	}
 	
+	
 	public String getDestino() {
 		return destino;
 	}
