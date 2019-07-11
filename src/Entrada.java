@@ -5,6 +5,7 @@ public class Entrada {
 	int costo;
 	char link;
 	
+	
 	public Entrada(int destino, int costo, char link) {
 		this.costo=costo;
 		this.destino=destino;
