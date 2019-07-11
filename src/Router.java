@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class Router {
 	private static int ID_GLOBAL = 1;
@@ -14,7 +13,7 @@ public class Router {
 		id = ID_GLOBAL++;
 		adyacentes = new HashMap<Link,Router>();
 		tablaRuteo = new ArrayList<Entrada>();
-		tablaRuteo.add(new Entrada(id,0,'-'));
+		tablaRuteo.add(new Entrada(nombre,0,'-'));
 		tablaRuteoAnterior = new ArrayList<Entrada>();
 		this.nombre=nombre;
 	}
@@ -30,17 +29,20 @@ public class Router {
 	}
 	
 	public void actualizarTabla(ArrayList<Entrada> mensajes) {
-		tablaRuteoAnterior = tablaRuteo;
-		for(Link l: adyacentes.keySet())
-			System.out.println("Link: "+ l.getId()+ " costo: "+l.getCosto());
+		tablaRuteoAnterior = getCopiaArray(tablaRuteo);
+		tablaRuteo = new ArrayList<Entrada>();
+		tablaRuteo.add(new Entrada(nombre,0,'-'));
 		for(Entrada e:mensajes) {
-			System.out.println("router " + id + " destino " + e.getDestino() + " costo " + e.getCosto() + " link " + e.getLink());
 			int costoLink = 0;
 			for(Link l:adyacentes.keySet()) {
 				if(l.getId() == e.getLink()) {
-					costoLink = l.getCosto();
+					if(l.isCaido()) {
+						costoLink = 1000;
+					}else {
+						costoLink = l.getCosto();
+					}
+					break;
 				}
-				break;
 			}
 			if(tablaRuteo.contains(e)) {
 				if((e.getCosto()+costoLink)<tablaRuteo.get(tablaRuteo.indexOf(e)).getCosto()) {
@@ -56,7 +58,17 @@ public class Router {
 		}
 	}
 	
+	private ArrayList<Entrada> getCopiaArray(ArrayList<Entrada> tablaRuteo) {
+		ArrayList<Entrada> copia = new ArrayList<Entrada>();
+		for(Entrada e: tablaRuteo) {
+			copia.add(new Entrada(e.getDestino(),e.getCosto(),e.getLink()));
+		}
+		return copia;
+	}
+
 	public boolean converge() {
+		if(tablaRuteo.size()!=tablaRuteoAnterior.size())
+			return false;
 		for(Entrada e : tablaRuteo) {
 			if(tablaRuteoAnterior.isEmpty())
 				return false;
@@ -83,5 +95,29 @@ public class Router {
 	@Override
 	public boolean equals(Object obj) {
 		return nombre.equals(((Router)obj).getNombre());
+	}
+	
+	public void actualizarRouterCaidaLink(Link link, HashMap<String, ArrayList<Entrada>> informacionCaida) {
+		ArrayList<Entrada> modificados=new ArrayList<Entrada>();
+		Router routerAdy=new Router("a");
+		routerAdy=link.getAdyacente(this);
+		if(!informacionCaida.containsKey(nombre))
+		{
+			for(Entrada e:tablaRuteo) {
+				if(!link.isCaido() && e.getLink()==link.getId() && informacionCaida.get(routerAdy.getNombre()).contains(new Entrada(e.getDestino(),0,e.getLink()))) {
+					e.setCosto(1000);
+					modificados.add(e);
+				}else if(link.isCaido() && e.getLink()==link.getId()) {
+					e.setCosto(1000);
+					modificados.add(e);
+				}
+			}
+			informacionCaida.put(nombre, modificados);
+			for(Link l:adyacentes.keySet()) {
+				if(!l.isCaido() && (modificados.size()!=0)) {
+					adyacentes.get(l).actualizarRouterCaidaLink(l, informacionCaida);
+				}
+			}
+		}
 	}
 }

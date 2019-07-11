@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class main {
 	private ArrayList<Router> routers;
@@ -8,11 +7,14 @@ public class main {
 	private ArrayList<String> pasosConvergencia;
 	private int numeroPasosConvergencia;
 	
+	private ArrayList<HashMap<String,ArrayList<Entrada>>> informacion;
+	
 	public main() {
 		routers = new ArrayList<>();
 		links = new ArrayList<>();
 		pasosConvergencia = new ArrayList<>();
 		numeroPasosConvergencia = 0;
+		informacion = new ArrayList<HashMap<String,ArrayList<Entrada>>>();
 	}
 	
 	public boolean addRouter(String nombre) {
@@ -65,12 +67,11 @@ public class main {
 		for(Router r : routers) {
 			ArrayList<Entrada> mensajesRouter = new ArrayList<Entrada>();
 			HashMap<Link,Router> adyacentes = r.getAdyacentes();
-			Set<Link> keys = adyacentes.keySet();
-			for(Link l : keys) {
+			for(Link l : adyacentes.keySet()) {
 				ArrayList<Entrada> 	mensajesAdyacente = adyacentes.get(l).getTablaRuteo();
 				for(Entrada e : mensajesAdyacente) {
 					if(l.getId() == e.getLink()){
-						mensajesRouter.add(new Entrada(e.getDestino(), Integer.MAX_VALUE,e.getLink()));
+						mensajesRouter.add(new Entrada(e.getDestino(), 1000,e.getLink()));
 					}
 					else {
 						mensajesRouter.add(new Entrada(e.getDestino(), e.getCosto(),l.getId()));
@@ -81,9 +82,9 @@ public class main {
 		}
 		for(Router r:routers) {//PARA CADA ROUTER
 			r.actualizarTabla(mensajes.get(r));//ACTUALIZO
+			informacion.get(numeroPasosConvergencia).put(r.getNombre(), r.getTablaRuteo());
 		}
 		pasosConvergencia.add(getTablasRuteoRed());
-		System.out.println(getTablasRuteoRed());
 	}
 	
 	public ArrayList<String> getInformacionConvergencia() {
@@ -96,11 +97,18 @@ public class main {
 	
 	public void aplicarAlgoritmo() {	
 		pasosConvergencia.add(getTablasRuteoRed());
-
-		System.out.println(getTablasRuteoRed());
-		System.out.println("----------");
+		pasosConvergencia = new ArrayList<>();
+		numeroPasosConvergencia = 0;
+		informacion = new ArrayList<HashMap<String,ArrayList<Entrada>>>();
+		informacion.add(new HashMap<String, ArrayList<Entrada>>());
+		for(Router r:routers) {
+			informacion.get(numeroPasosConvergencia).put(r.getNombre(), r.getTablaRuteo());
+		}
+		numeroPasosConvergencia++;
 		
+		 
 		while(!convergeRed()){
+			informacion.add(new HashMap<String, ArrayList<Entrada>>());
 			realizarIntercambio();
 			numeroPasosConvergencia++;
 		}
@@ -113,4 +121,21 @@ public class main {
 		}
 		return nombres;
 	}
+	
+	public ArrayList<Link> getLinks() {
+		return links;
+	}
+	
+	public ArrayList<HashMap<String, ArrayList<Entrada>>> getInformacion() {
+		return informacion;
+	}
+
+	public HashMap<String, ArrayList<Entrada>> caerLink(Link linkCaido, Router r1) {
+		HashMap<String, ArrayList<Entrada>> informacionCaida = new HashMap<String, ArrayList<Entrada>>();
+		r1.actualizarRouterCaidaLink(linkCaido, informacionCaida);
+		
+		return informacionCaida;
+	}
+	
+	
 }
