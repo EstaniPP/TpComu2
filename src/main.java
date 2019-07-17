@@ -17,8 +17,8 @@ public class main {
 		informacion = new ArrayList<HashMap<String,ArrayList<Entrada>>>();
 	}
 	
-	public boolean addRouter(String nombre) {
-		Router router=new Router(nombre);
+	public boolean addRouter(String nombre, int tiempo) {
+		Router router=new Router(nombre, tiempo);
 		if(!routers.contains(router)) {
 			routers.add(router);
 			return true;
@@ -120,6 +120,10 @@ public class main {
 			nombres.add(r.getNombre());
 		}
 		return nombres;
+	}
+	
+	public ArrayList<Router> getListaRouters() {
+		return routers;
 	}
 	
 	public ArrayList<Link> getLinks() {

@@ -60,12 +60,17 @@ public class Visualizador {
 		btnGuardarResultados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				StringBuilder infotxt = new StringBuilder();
+				ArrayList<Router> routers = red.getListaRouters();
+				routers.sort(null);
 				for(int i=0;i<informacion.size();i++) {
-					infotxt.append("Tiempo= "+i*30+"\n");
-					for(String s: informacion.get(i).keySet()) {
-						infotxt.append("Router: "+s+"\n");
-						for(int j=0;j<informacion.get(i).get(s).size(); j++) {
-							infotxt.append("Destino: "+informacion.get(i).get(s).get(j).getDestino()+" costo "+informacion.get(i).get(s).get(j).getCosto()+ " link "+ informacion.get(i).get(s).get(j).getLink()+ "\n");
+					for(Router r: routers) {
+						infotxt.append("Tiempo= "+(i*30+r.getTiempoActivacion())+"\n");
+						infotxt.append("Router: "+r.getNombre()+"\n");
+						for(Router ady:r.getRoutersAdyacentes()) {
+							infotxt.append("Mensajes recibidos por Router: "+ady.getNombre()+"\n");
+							for(int j=0;j<informacion.get(i).get(r.getNombre()).size(); j++) {
+								infotxt.append("Red Destino: "+informacion.get(i).get(r.getNombre()).get(j).getDestino()+" costo "+informacion.get(i).get(r.getNombre()).get(j).getCosto()+ " link "+ informacion.get(i).get(r.getNombre()).get(j).getLink()+ "\n");
+							}
 						}
 					}
 				}

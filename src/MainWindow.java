@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class MainWindow {
 
@@ -95,7 +97,7 @@ public class MainWindow {
 		lblNombre.setBounds(12, 44, 79, 15);
 		frame.getContentPane().add(lblNombre);
 		
-		JLabel lblRouterNuevo = new JLabel("Router/red nuevo:");
+		JLabel lblRouterNuevo = new JLabel("Router nuevo:");
 		lblRouterNuevo.setBounds(346, 12, 136, 15);
 		frame.getContentPane().add(lblRouterNuevo);
 		
@@ -148,11 +150,16 @@ public class MainWindow {
 		textField_1.setBounds(430, 39, 95, 19);
 		frame.getContentPane().add(textField_1);
 		
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(0, 0, 29, 1));
+		spinner.setBounds(506, 65, 53, 20);
+		frame.getContentPane().add(spinner);
+		
 		JButton btnAgregar_1 = new JButton("Agregar router");
 		btnAgregar_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(!textField_1.getText().equals(""))
-					if(m.addRouter(textField_1.getText())) {
+					if(m.addRouter(textField_1.getText(),(int)spinner.getValue())) {
 						comboBox.addItem(textField_1.getText());
 						comboBox_1.addItem(textField_1.getText());
 						Object[] p = new Object[] {textField_1.getText()};
@@ -160,7 +167,7 @@ public class MainWindow {
 					}
 			}
 		});
-		btnAgregar_1.setBounds(346, 70, 179, 25);
+		btnAgregar_1.setBounds(346, 96, 179, 25);
 		frame.getContentPane().add(btnAgregar_1);
 		
 		
@@ -185,9 +192,9 @@ public class MainWindow {
 		JButton btnAplicarAlgoritmo = new JButton("Aplicar algoritmo");
 		btnAplicarAlgoritmo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				m.addRouter("A");
-				m.addRouter("B");
-				m.addRouter("C");
+				m.addRouter("A",1);
+				m.addRouter("B",4);
+				m.addRouter("C",3);
 		
 				m.addLink('1', 2, "B", "C");
 				m.addLink('2', 1, "A", "B");
@@ -200,5 +207,11 @@ public class MainWindow {
 		});
 		btnAplicarAlgoritmo.setBounds(479, 428, 151, 25);
 		frame.getContentPane().add(btnAplicarAlgoritmo);
+		
+		JLabel lblTiempoDeActivacion = new JLabel("Tiempo de Activación");
+		lblTiempoDeActivacion.setBounds(346, 65, 163, 15);
+		frame.getContentPane().add(lblTiempoDeActivacion);
+		
+		
 	}
 }

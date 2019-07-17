@@ -1,21 +1,23 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Router {
+public class Router implements Comparable<Router>{
 	private static int ID_GLOBAL = 1;
 	private int id;
 	private HashMap<Link,Router> adyacentes;
 	private ArrayList<Entrada> tablaRuteo;
 	private ArrayList<Entrada> tablaRuteoAnterior;
 	private String nombre;
+	private int tiempoActivacion;
 	
-	public Router(String nombre) {
+	public Router(String nombre, int tiempo) {
 		id = ID_GLOBAL++;
 		adyacentes = new HashMap<Link,Router>();
 		tablaRuteo = new ArrayList<Entrada>();
 		tablaRuteo.add(new Entrada(nombre,0,'-'));
 		tablaRuteoAnterior = new ArrayList<Entrada>();
 		this.nombre=nombre;
+		this.tiempoActivacion=tiempo;
 	}
 	
 	public void addAdyacente(Link link, Router router) {
@@ -23,6 +25,12 @@ public class Router {
 			adyacentes.put(link, router);
 		}
 	}
+	
+	public int getTiempoActivacion() {
+		return tiempoActivacion;
+	}
+	
+	
 	
 	public ArrayList<Entrada> getTablaRuteo() {
 		return tablaRuteo;
@@ -99,7 +107,7 @@ public class Router {
 	
 	public void actualizarRouterCaidaLink(Link link, HashMap<String, ArrayList<Entrada>> informacionCaida) {
 		ArrayList<Entrada> modificados=new ArrayList<Entrada>();
-		Router routerAdy=new Router("a");
+		Router routerAdy=new Router("a",0);
 		routerAdy=link.getAdyacente(this);
 		if(!informacionCaida.containsKey(nombre))
 		{
@@ -119,5 +127,18 @@ public class Router {
 				}
 			}
 		}
+	}
+
+	public ArrayList<Router> getRoutersAdyacentes(){
+		ArrayList<Router> aux=new ArrayList<>();
+		for(Link l:adyacentes.keySet()) {
+			aux.add(adyacentes.get(l));
+		}
+		return aux;
+	}
+	
+	@Override
+	public int compareTo(Router arg0) {
+		return (this.tiempoActivacion-arg0.getTiempoActivacion());
 	}
 }

@@ -59,8 +59,8 @@ public class CaidaLink {
 		scrollPane.setViewportView(panelRuteo);
 		panelRuteo.setLayout(new BoxLayout(panelRuteo,BoxLayout.Y_AXIS));
 		
-		Router r1 = new Router("aux");
-		Router r2 = new Router("aux2");
+		Router r1 = new Router("aux",0);
+		Router r2 = new Router("aux2",0);
 		Link linkCaido = new Link('a',1,r1,r2);
 		for(Link l: red.getLinks()) {
 			if(l.getId()==link) {
@@ -81,7 +81,7 @@ public class CaidaLink {
 		}
 		HashMap<String, ArrayList<Entrada>> info1 = red.caerLink(linkCaido,r1);
 		{		
-			JLabel labelTiempo = new JLabel("\n Tiempo: "+ran1+" segundos\n Router: "+r1.getNombre()+"\n");
+			JLabel labelTiempo = new JLabel("\n Tiempo: "+ran1+" segundos\n");
 			labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
 			
 			Box box2 = Box.createHorizontalBox();
@@ -109,7 +109,7 @@ public class CaidaLink {
 		HashMap<String, ArrayList<Entrada>> info2 = red.caerLink(linkCaido,r2);
 		{	
 		
-			JLabel labelTiempo = new JLabel("\n Tiempo: "+ran2+" segundos\nRouter: "+r2.getNombre()+"\n");
+			JLabel labelTiempo = new JLabel("\n Tiempo: "+ran2+" segundos\n");
 			labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
 			
 			Box box2 = Box.createHorizontalBox();
@@ -166,6 +166,7 @@ public class CaidaLink {
 		btnGuardarResultados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				StringBuilder infotxt = new StringBuilder();
+				ArrayList<Router> routers = red.getListaRouters();
 				
 				infotxt.append("Tiempo= "+ran1+"\n");
 				for(String s: info1.keySet()) {
@@ -187,12 +188,17 @@ public class CaidaLink {
 					}
 				}
 				
-				for(int i=0;i<informacion.size();i++) {	
-					infotxt.append("Tiempo= "+(1+i)*30+"\n");
-					for(String s: informacion.get(i).keySet()) {
-						infotxt.append("Router: "+s+"\n");
-						for(int j=0;j<informacion.get(i).get(s).size(); j++) {
-							infotxt.append("Destino: "+informacion.get(i).get(s).get(j).getDestino()+" costo "+informacion.get(i).get(s).get(j).getCosto()+ " link "+ informacion.get(i).get(s).get(j).getLink()+ "\n");
+				ArrayList<Router> routers2 = red.getListaRouters();
+				routers.sort(null);
+				for(int i=0;i<informacion.size();i++) {
+					for(Router r: routers2) {
+						infotxt.append("Tiempo= "+((1+i)*30+r.getTiempoActivacion())+"\n");
+						infotxt.append("Router: "+r.getNombre()+"\n");
+						for(Router ady:r.getRoutersAdyacentes()) {
+							infotxt.append("Mensajes recibidos por Router: "+ady.getNombre()+"\n");
+							for(int j=0;j<informacion.get(i).get(r.getNombre()).size(); j++) {
+								infotxt.append("Red Destino: "+informacion.get(i).get(r.getNombre()).get(j).getDestino()+" costo "+informacion.get(i).get(r.getNombre()).get(j).getCosto()+ " link "+ informacion.get(i).get(r.getNombre()).get(j).getLink()+ "\n");
+							}
 						}
 					}
 				}
