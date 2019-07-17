@@ -1,28 +1,21 @@
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Dimension;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-
-
-
 
 public class CaidaLink {
 	private main red;
@@ -35,9 +28,7 @@ public class CaidaLink {
 	public CaidaLink(main red, char link) {
 		this.red=red;
 		this.link = link;
-		
 		initialize();
-		
 	}
 	
 	private void showRouters(JTable tablasRuteo, ArrayList<Entrada> entradas) {
@@ -46,7 +37,7 @@ public class CaidaLink {
 		df.addColumn("Costo");
 		df.addColumn("Link");
 		for(Entrada e: entradas) {
-		 df.addRow(new Object[] {e.getDestino(),e.getCosto(),e.getLink()});
+			df.addRow(new Object[] {e.getDestino(),e.getCosto(),e.getLink()});
 		}
 		tablasRuteo.setModel(df);
 	}
@@ -55,20 +46,18 @@ public class CaidaLink {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-			
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 650, 800);
+		frame.setBounds(100, 100, 650, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 12, 626, 700);
+		scrollPane.setBounds(12, 12, 626, 580);
 		frame.getContentPane().add(scrollPane);
 		JPanel panelRuteo = new JPanel();
 		scrollPane.setViewportView(panelRuteo);
 		panelRuteo.setLayout(new BoxLayout(panelRuteo,BoxLayout.Y_AXIS));
-		
 		
 		Router r1 = new Router("aux");
 		Router r2 = new Router("aux2");
@@ -90,9 +79,65 @@ public class CaidaLink {
 			ran1=ran2;
 			ran2=tAux;
 		}
-			HashMap<String, ArrayList<Entrada>> info1 = red.caerLink(linkCaido,r1);
-			{		
-				JLabel labelTiempo = new JLabel("\n Tiempo: "+ran1+" segundos\n Router: "+r1.getNombre()+"\n");
+		HashMap<String, ArrayList<Entrada>> info1 = red.caerLink(linkCaido,r1);
+		{		
+			JLabel labelTiempo = new JLabel("\n Tiempo: "+ran1+" segundos\n Router: "+r1.getNombre()+"\n");
+			labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
+			
+			Box box2 = Box.createHorizontalBox();
+			panelRuteo.add(box2);
+			JPanel aux2 = new JPanel();
+			aux2.add(labelTiempo);
+			box2.add(aux2);
+			for(String s: info1.keySet()) {
+				if(info1.get(s).size()>0) {
+					Box box = Box.createHorizontalBox();
+					panelRuteo.add(box);
+					JPanel aux = new JPanel();
+					aux.add(new JLabel("Router: "+s));
+					box.add(aux);
+					JTable table = new JTable();
+					showRouters(table,info1.get(s));
+					JScrollPane panel = new JScrollPane(table);
+					panel.setPreferredSize(new Dimension(590,100));
+					panel.setViewportView(table);
+					panelRuteo.add(panel);
+				}
+			}
+		}
+			
+		HashMap<String, ArrayList<Entrada>> info2 = red.caerLink(linkCaido,r2);
+		{	
+		
+			JLabel labelTiempo = new JLabel("\n Tiempo: "+ran2+" segundos\nRouter: "+r2.getNombre()+"\n");
+			labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
+			
+			Box box2 = Box.createHorizontalBox();
+			panelRuteo.add(box2);
+			JPanel aux2 = new JPanel();
+			aux2.add(labelTiempo);
+			box2.add(aux2);
+			for(String s: info2.keySet()) {
+				if(info2.get(s).size()>0) {
+					Box box = Box.createHorizontalBox();
+					panelRuteo.add(box);
+					JPanel aux = new JPanel();
+					aux.add(new JLabel("Router: "+s));
+					box.add(aux);
+					JTable table = new JTable();
+					showRouters(table,info2.get(s));
+					JScrollPane panel = new JScrollPane(table);
+					panel.setPreferredSize(new Dimension(590,100));
+					panel.setViewportView(table);
+					panelRuteo.add(panel);
+				}
+			}
+		}
+		red.aplicarAlgoritmo();
+		informacion = red.getInformacion();
+		{
+			for(int i=0;i<informacion.size();i++) {
+				JLabel labelTiempo = new JLabel("\n Tiempo: "+(i+1)*30+" segundos\n");
 				labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
 				
 				Box box2 = Box.createHorizontalBox();
@@ -100,79 +145,23 @@ public class CaidaLink {
 				JPanel aux2 = new JPanel();
 				aux2.add(labelTiempo);
 				box2.add(aux2);
-				for(String s: info1.keySet()) {
-					if(info1.get(s).size()>0) {
-						Box box = Box.createHorizontalBox();
-						panelRuteo.add(box);
-						JPanel aux = new JPanel();
-						aux.add(new JLabel("Router: "+s));
-						box.add(aux);
-						JTable table = new JTable();
-						showRouters(table,info1.get(s));
-						JScrollPane panel = new JScrollPane(table);
-						panel.setPreferredSize(new Dimension(590,100));
-						panel.setViewportView(table);
-						panelRuteo.add(panel);
-					}
-				}
-			}
-			
-			HashMap<String, ArrayList<Entrada>> info2 = red.caerLink(linkCaido,r2);
-			{	
-			
-				JLabel labelTiempo = new JLabel("\n Tiempo: "+ran2+" segundos\nRouter: "+r2.getNombre()+"\n");
-				labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
 				
-				Box box2 = Box.createHorizontalBox();
-				panelRuteo.add(box2);
-				JPanel aux2 = new JPanel();
-				aux2.add(labelTiempo);
-				box2.add(aux2);
-				for(String s: info2.keySet()) {
-					if(info2.get(s).size()>0) {
-						Box box = Box.createHorizontalBox();
-						panelRuteo.add(box);
-						JPanel aux = new JPanel();
-						aux.add(new JLabel("Router: "+s));
-						box.add(aux);
-						JTable table = new JTable();
-						showRouters(table,info2.get(s));
-						JScrollPane panel = new JScrollPane(table);
-						panel.setPreferredSize(new Dimension(590,100));
-						panel.setViewportView(table);
-						panelRuteo.add(panel);
-					}
-				}
-			
-			}
-			red.aplicarAlgoritmo();
-			informacion = red.getInformacion();
-			{
-				for(int i=0;i<informacion.size();i++) {
-					JLabel labelTiempo = new JLabel("\n Tiempo: "+(i+1)*30+" segundos\n");
-					labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
-					
-					Box box2 = Box.createHorizontalBox();
-					panelRuteo.add(box2);
-					JPanel aux2 = new JPanel();
-					aux2.add(labelTiempo);
-					box2.add(aux2);
-					
-					for(String s: informacion.get(i).keySet()) {
-						Box box = Box.createHorizontalBox();
-						panelRuteo.add(box);
-						JPanel aux = new JPanel();
-						aux.add(new JLabel("Router: "+s));
-						box.add(aux);
-						JTable table = new JTable();
-						showRouters(table,informacion.get(i).get(s));
-						JScrollPane panel = new JScrollPane(table);
-						panel.setPreferredSize(new Dimension(590,100));
-						panel.setViewportView(table);
-						panelRuteo.add(panel);
-					}
+				for(String s: informacion.get(i).keySet()) {
+					Box box = Box.createHorizontalBox();
+					panelRuteo.add(box);
+					JPanel aux = new JPanel();
+					aux.add(new JLabel("Router: "+s));
+					box.add(aux);
+					JTable table = new JTable();
+					showRouters(table,informacion.get(i).get(s));
+					JScrollPane panel = new JScrollPane(table);
+					panel.setPreferredSize(new Dimension(590,100));
+					panel.setViewportView(table);
+					panelRuteo.add(panel);
 				}
 			}
+		}
+		
 		JButton btnGuardarResultados = new JButton("Guardar resultados");
 		btnGuardarResultados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -228,9 +217,7 @@ public class CaidaLink {
 	    		}				
 			}
 		});
-		btnGuardarResultados.setBounds(472, 724, 166, 25);
+		btnGuardarResultados.setBounds(472, 620, 166, 25);
 		frame.getContentPane().add(btnGuardarResultados);
-		
-	
 	}
 }

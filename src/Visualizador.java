@@ -1,28 +1,22 @@
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.Dimension;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
-
-
-
 
 public class Visualizador {
 	private main red;
@@ -41,7 +35,7 @@ public class Visualizador {
 		df.addColumn("Costo");
 		df.addColumn("Link");
 		for(Entrada e: entradas) {
-		 df.addRow(new Object[] {e.getDestino(),e.getCosto(),e.getLink()});
+			df.addRow(new Object[] {e.getDestino(),e.getCosto(),e.getLink()});
 		}
 		tablasRuteo.setModel(df);
 	}
@@ -51,12 +45,12 @@ public class Visualizador {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 650, 800);
+		frame.setBounds(100, 100, 650, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 12, 626, 700);
+		scrollPane.setBounds(12, 12, 626, 580);
 		frame.getContentPane().add(scrollPane);
 		JPanel panelRuteo = new JPanel();
 		scrollPane.setViewportView(panelRuteo);
@@ -96,21 +90,21 @@ public class Visualizador {
 	    		}				
 			}
 		});
-		btnGuardarResultados.setBounds(472, 724, 166, 25);
+		btnGuardarResultados.setBounds(472, 620, 166, 25);
 		frame.getContentPane().add(btnGuardarResultados);
 		
 		JLabel lblLink = new JLabel("Link:");
-		lblLink.setBounds(22, 729, 66, 15);
+		lblLink.setBounds(22, 620, 66, 15);
 		frame.getContentPane().add(lblLink);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(75, 724, 90, 24);
+		comboBox.setBounds(75, 620, 90, 24);
 		frame.getContentPane().add(comboBox);
 		
 		for(Link l: red.getLinks()) {
 			comboBox.addItem(l.getId());
 		}
-		
+				
 		for(int i=0;i<informacion.size();i++) {
 			JLabel labelTiempo = new JLabel("\n Tiempo: "+i*30+" segundos\n");
 			labelTiempo.setFont(new Font("Arial", Font.BOLD , 16));
@@ -143,7 +137,7 @@ public class Visualizador {
 				v.frame.setVisible(true);
 			}
 		});
-		btnSimularCaidaDe.setBounds(181, 724, 177, 25);
+		btnSimularCaidaDe.setBounds(181, 620, 177, 25);
 		frame.getContentPane().add(btnSimularCaidaDe);
 		
 	}
